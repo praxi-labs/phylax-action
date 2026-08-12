@@ -7,7 +7,7 @@ The action reads your lockfiles, verifies every pinned dependency against Phylax
 ## Install
 
 ```yaml
-- uses: phylax/action@v1
+- uses: praxi-labs/phylax-action@v1
   with:
     api-token: ${{ secrets.PHYLAX_API_TOKEN }}
 ```
@@ -35,7 +35,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: phylax/action@v1
+      - uses: praxi-labs/phylax-action@v1
         with:
           api-token: ${{ secrets.PHYLAX_API_TOKEN }}
           artifact-path: .
@@ -61,7 +61,7 @@ Two lines in that workflow are doing more work than they look.
 <summary><b>Verify specific artifacts instead of scanning a path</b></summary>
 
 ```yaml
-- uses: phylax/action@v1
+- uses: praxi-labs/phylax-action@v1
   with:
     api-token: ${{ secrets.PHYLAX_API_TOKEN }}
     artifacts: pkg:npm/express@4.18.2, pkg:pypi/requests@2.32.3
@@ -73,7 +73,7 @@ Two lines in that workflow are doing more work than they look.
 <summary><b>Gate a release on your own policy</b></summary>
 
 ```yaml
-- uses: phylax/action@v1
+- uses: praxi-labs/phylax-action@v1
   with:
     api-token: ${{ secrets.PHYLAX_API_TOKEN }}
     policy: prod-runtime-policy
