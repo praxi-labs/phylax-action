@@ -1,0 +1,30 @@
+{
+  "name": "@phylax/action",
+  "version": "0.1.0",
+  "description": "GitHub Action to verify artifacts and enforce supply chain policy with Phylax.",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "esbuild src/index.ts --bundle --platform=node --target=node20 --format=esm --outfile=dist/index.js --banner:js=\"import{createRequire}from'node:module';const require=createRequire(import.meta.url);\"",
+    "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\"",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "package": "npm run clean && npm run build"
+  },
+  "keywords": ["phylax", "github-action", "supply-chain", "security"],
+  "dependencies": {
+    "@actions/core": "^1.11.1",
+    "@actions/github": "^6.0.0",
+    "@phylax/sdk": "file:../phylax-sdk-js"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "esbuild": "^0.24.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}

@@ -1,0 +1,64 @@
+name: Phylax Security
+
+description: Verify artifacts and enforce supply chain policy in your GitHub workflows
+
+author: Phylax
+
+branding:
+  icon: shield
+  color: green
+
+inputs:
+  api-token:
+    description: Phylax API token. Store it as a repository or organization secret.
+    required: true
+
+  artifact-path:
+    description: Directory or lockfile to verify. Defaults to the repository root.
+    default: '.'
+
+  artifacts:
+    description: Comma separated package URLs to verify instead of scanning a path.
+    default: ''
+
+  policy:
+    description: Named Phylax policy to evaluate against. Omit for the organization default.
+    default: ''
+
+  fail-on:
+    description: Verdict that fails the job. One of block, warn, never.
+    default: block
+
+  format:
+    description: Report format to write. One of sarif, json, none.
+    default: sarif
+
+  output:
+    description: Path to write the report to.
+    default: phylax.sarif
+
+  comment:
+    description: Post a summary comment on the pull request.
+    default: 'false'
+
+  github-token:
+    description: Token used to post the pull request comment.
+    default: ${{ github.token }}
+
+  base-url:
+    description: Phylax API base URL.
+    default: https://api.phyi.dev
+
+outputs:
+  verdict:
+    description: The strictest verdict across all verified artifacts.
+  blocked-count:
+    description: Number of artifacts that returned BLOCK.
+  warned-count:
+    description: Number of artifacts that returned WARN.
+  report-path:
+    description: Path to the written report, when a format other than none is used.
+
+runs:
+  using: node20
+  main: dist/index.js
