@@ -9,7 +9,7 @@
     "node": ">=20"
   },
   "scripts": {
-    "build": "esbuild src/index.ts --bundle --platform=node --target=node20 --format=esm --outfile=dist/index.js --banner:js=\"import{createRequire}from'node:module';const require=createRequire(import.meta.url);\"",
+    "build": "esbuild src/index.ts --bundle --platform=node --target=node24 --format=esm --outfile=dist/index.js --banner:js=\"import{createRequire}from'node:module';const require=createRequire(import.meta.url);\"",
     "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\"",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",

@@ -60,5 +60,5 @@ outputs:
     description: Path to the written report, when a format other than none is used.
 
 runs:
-  using: node20
+  using: node24
   main: dist/index.js
