@@ -10,7 +10,5 @@ jobs:
   release:
     name: Release
     uses: praxi-labs/ci/.github/workflows/action-release.yml@v1
-    with:
-      sibling-package: phylax-sdk-js
     permissions:
       contents: write

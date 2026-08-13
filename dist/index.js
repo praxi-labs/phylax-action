@@ -21626,7 +21626,7 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
 var core = __toESM(require_core(), 1);
 import { writeFile } from "node:fs/promises";
 
-// ../phylax-sdk-js/dist/types/result.js
+// node_modules/@phyi/sdk/dist/types/result.js
 function classifyStatus(status) {
   switch (status) {
     case 401:
@@ -21649,7 +21649,7 @@ function classifyStatus(status) {
   }
 }
 
-// ../phylax-sdk-js/dist/utils/redact.js
+// node_modules/@phyi/sdk/dist/utils/redact.js
 function redactToken(value, token) {
   if (!token || token.length < 8) {
     return value;
@@ -21660,7 +21660,7 @@ function truncate(value, max = 500) {
   return value.length > max ? `${value.slice(0, max)}...` : value;
 }
 
-// ../phylax-sdk-js/dist/utils/url.js
+// node_modules/@phyi/sdk/dist/utils/url.js
 function buildUrl(baseUrl, path, query) {
   const url = new URL(path, baseUrl);
   if (query) {
@@ -21673,7 +21673,7 @@ function buildUrl(baseUrl, path, query) {
   return url.href;
 }
 
-// ../phylax-sdk-js/dist/constants.js
+// node_modules/@phyi/sdk/dist/constants.js
 var DEFAULT_BASE_URL = "https://api.phyi.dev";
 var DEFAULT_TIMEOUT_MS = 3e4;
 var DEFAULT_MAX_RETRIES = 3;
@@ -21822,7 +21822,7 @@ var METHOD_REQUIREMENTS = {
   }
 };
 
-// ../phylax-sdk-js/dist/client/retry.js
+// node_modules/@phyi/sdk/dist/client/retry.js
 var IDEMPOTENT_METHODS = /* @__PURE__ */ new Set([
   "GET",
   "HEAD",
@@ -21858,7 +21858,7 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-// ../phylax-sdk-js/dist/client/http-client.js
+// node_modules/@phyi/sdk/dist/client/http-client.js
 var HttpClient = class {
   #config;
   constructor(config) {
@@ -21958,18 +21958,18 @@ var HttpClient = class {
   }
 };
 
-// ../phylax-sdk-js/dist/version.js
+// node_modules/@phyi/sdk/dist/version.js
 var SDK_NAME = "@phyi/sdk";
 var SDK_VERSION = "0.1.0";
 
-// ../phylax-sdk-js/dist/client/user-agent.js
+// node_modules/@phyi/sdk/dist/client/user-agent.js
 function buildUserAgent(suffix) {
   const runtime = typeof process !== "undefined" && process.versions?.node ? ` node/${process.versions.node}` : "";
   const base = `${SDK_NAME}/${SDK_VERSION}${runtime}`;
   return suffix ? `${suffix} ${base}` : base;
 }
 
-// ../phylax-sdk-js/dist/resources/artifacts.js
+// node_modules/@phyi/sdk/dist/resources/artifacts.js
 var ArtifactsResource = class {
   #http;
   constructor(http) {
@@ -22008,7 +22008,7 @@ var ArtifactsResource = class {
   }
 };
 
-// ../phylax-sdk-js/dist/resources/attestations.js
+// node_modules/@phyi/sdk/dist/resources/attestations.js
 var AttestationsResource = class {
   #http;
   constructor(http) {
@@ -22028,7 +22028,7 @@ var AttestationsResource = class {
   }
 };
 
-// ../phylax-sdk-js/dist/resources/policies.js
+// node_modules/@phyi/sdk/dist/resources/policies.js
 var PoliciesResource = class {
   #http;
   constructor(http) {
@@ -22054,7 +22054,7 @@ var PoliciesResource = class {
   }
 };
 
-// ../phylax-sdk-js/dist/types/plan.js
+// node_modules/@phyi/sdk/dist/types/plan.js
 var PLAN_ORDER = [
   "anonymous",
   "builder",
@@ -22067,7 +22067,7 @@ function planAtLeast(actual, required) {
   return a !== -1 && r !== -1 && a >= r;
 }
 
-// ../phylax-sdk-js/dist/resources/quota.js
+// node_modules/@phyi/sdk/dist/resources/quota.js
 var QuotaResource = class {
   #http;
   constructor(http) {
@@ -22117,7 +22117,7 @@ var QuotaResource = class {
   }
 };
 
-// ../phylax-sdk-js/dist/resources/repositories.js
+// node_modules/@phyi/sdk/dist/resources/repositories.js
 var RepositoriesResource = class {
   #http;
   constructor(http) {
@@ -22147,7 +22147,7 @@ var RepositoriesResource = class {
   }
 };
 
-// ../phylax-sdk-js/dist/resources/webhooks.js
+// node_modules/@phyi/sdk/dist/resources/webhooks.js
 var WebhooksResource = class {
   #http;
   constructor(http) {
@@ -22170,7 +22170,7 @@ var WebhooksResource = class {
   }
 };
 
-// ../phylax-sdk-js/dist/phylax-sdk.js
+// node_modules/@phyi/sdk/dist/phylax-sdk.js
 var PhylaxSdk = class {
   #http;
   artifacts;
