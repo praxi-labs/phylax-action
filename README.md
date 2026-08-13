@@ -1,5 +1,7 @@
 # Phylax Security (GitHub Action)
 
+[![release](https://img.shields.io/github/v/release/praxi-labs/phylax-action?label=release&color=2088FF)](https://github.com/praxi-labs/phylax-action/releases/latest)
+
 Verify what your build pulls in, and fail the job before a risky artifact ships.
 
 The action reads your lockfiles, verifies every pinned dependency against Phylax, writes a SARIF report for GitHub code scanning, and sets the job status from the strictest verdict. It is the same verification the CLI and the runtime gate perform, wired into a workflow.
@@ -7,7 +9,7 @@ The action reads your lockfiles, verifies every pinned dependency against Phylax
 ## Install
 
 ```yaml
-- uses: praxi-labs/phylax-action@v1
+- uses: praxi-labs/phylax-action@v0
   with:
     api-token: ${{ secrets.PHYLAX_API_TOKEN }}
 ```
@@ -35,7 +37,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: praxi-labs/phylax-action@v1
+      - uses: praxi-labs/phylax-action@v0
         with:
           api-token: ${{ secrets.PHYLAX_API_TOKEN }}
           artifact-path: .
@@ -61,7 +63,7 @@ Two lines in that workflow are doing more work than they look.
 <summary><b>Verify specific artifacts instead of scanning a path</b></summary>
 
 ```yaml
-- uses: praxi-labs/phylax-action@v1
+- uses: praxi-labs/phylax-action@v0
   with:
     api-token: ${{ secrets.PHYLAX_API_TOKEN }}
     artifacts: pkg:npm/express@4.18.2, pkg:pypi/requests@2.32.3
@@ -73,7 +75,7 @@ Two lines in that workflow are doing more work than they look.
 <summary><b>Gate a release on your own policy</b></summary>
 
 ```yaml
-- uses: praxi-labs/phylax-action@v1
+- uses: praxi-labs/phylax-action@v0
   with:
     api-token: ${{ secrets.PHYLAX_API_TOKEN }}
     policy: prod-runtime-policy
@@ -139,3 +141,17 @@ npm run package
 ## License
 
 MIT
+
+## The rest of Phylax
+
+| Tool | Where to get it |
+| --- | --- |
+| JavaScript SDK | [`@phyi/sdk`](https://www.npmjs.com/package/@phyi/sdk) on npm |
+| Python SDK | [`phylax-sdk`](https://github.com/praxi-labs/phylax-sdk-python), PyPI release pending |
+| MCP server | [`@phyi/mcp`](https://www.npmjs.com/package/@phyi/mcp) on npm |
+| Agent runtime gate | [`@phyi/runtime-gate`](https://www.npmjs.com/package/@phyi/runtime-gate) on npm |
+| VS Code extension | [`phylax.phylax`](https://marketplace.visualstudio.com/items?itemName=phylax.phylax) on the Marketplace |
+| GitHub Action | [`praxi-labs/phylax-action`](https://github.com/praxi-labs/phylax-action) |
+| Browser extension | [`praxi-labs/phylax-chrome`](https://github.com/praxi-labs/phylax-chrome/releases/latest), Web Store listing pending |
+
+Docs live at [phyi.dev](https://phyi.dev).
