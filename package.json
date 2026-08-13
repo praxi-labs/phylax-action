@@ -1,5 +1,5 @@
 {
-  "name": "@phylax/action",
+  "name": "@phyi/action",
   "version": "0.1.0",
   "description": "GitHub Action to verify artifacts and enforce supply chain policy with Phylax.",
   "license": "MIT",
@@ -29,7 +29,7 @@
     "undici": "^6.28.0"
   },
   "devDependencies": {
-    "@phylax/sdk": "file:../phylax-sdk-js",
+    "@phyi/sdk": "file:../phylax-sdk-js",
     "@types/node": "^22.10.2",
     "esbuild": "^0.28.0",
     "typescript": "^5.7.2",

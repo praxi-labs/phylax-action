@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import { PhylaxSdk } from '@phylax/sdk'
+import { PhylaxSdk } from '@phyi/sdk'
 
 import { parseInputs, shouldFail } from '../../src/inputs.js'
 import { parsePackageLock, parseRequirements } from '../../src/manifests.js'

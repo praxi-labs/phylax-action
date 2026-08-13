@@ -21959,7 +21959,7 @@ var HttpClient = class {
 };
 
 // ../phylax-sdk-js/dist/version.js
-var SDK_NAME = "@phylax/sdk";
+var SDK_NAME = "@phyi/sdk";
 var SDK_VERSION = "0.1.0";
 
 // ../phylax-sdk-js/dist/client/user-agent.js

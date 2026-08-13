@@ -1,4 +1,4 @@
-import { PhylaxSdk } from '@phylax/sdk'
+import { PhylaxSdk } from '@phyi/sdk'
 
 import { discoverArtifacts } from './manifests.js'
 import { parseInputs, shouldFail, type ActionInputs, type InputReader } from './inputs.js'
