@@ -26,7 +26,9 @@ inputs:
     default: ''
 
   fail-on:
-    description: Verdict that fails the job. One of block, warn, never.
+    description: >-
+      Verdict that fails the job. One of block, warn, uncovered, never.
+      uncovered also fails when an artifact has not been evaluated by the network.
     default: block
 
   format:
@@ -56,6 +58,8 @@ outputs:
     description: Number of artifacts that returned BLOCK.
   warned-count:
     description: Number of artifacts that returned WARN.
+  uncovered-count:
+    description: Number of artifacts the network has not evaluated, which carry no verdict.
   report-path:
     description: Path to the written report, when a format other than none is used.
 

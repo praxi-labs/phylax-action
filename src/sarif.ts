@@ -15,6 +15,11 @@ export interface Counts {
   blocked: number
   warned: number
   allowed: number
+  uncovered: number
+}
+
+export function isUncovered(result: VerifiedArtifact): boolean {
+  return String(result.coverage ?? '') === 'none'
 }
 
 const SEVERITY_TO_LEVEL: Record<string, string> = {
@@ -25,9 +30,13 @@ const SEVERITY_TO_LEVEL: Record<string, string> = {
 }
 
 export function countVerdicts(results: VerifiedArtifact[]): Counts {
-  const counts: Counts = { blocked: 0, warned: 0, allowed: 0 }
+  const counts: Counts = { blocked: 0, warned: 0, allowed: 0, uncovered: 0 }
 
   for (const result of results) {
+    if (isUncovered(result)) {
+      counts.uncovered++
+      continue
+    }
     const verdict = String(result.verdict ?? '').toUpperCase()
     if (verdict === 'BLOCK') {
       counts.blocked++
@@ -140,10 +149,20 @@ export function toSummary(results: VerifiedArtifact[]): string {
     `| BLOCK | ${counts.blocked} |`,
     `| WARN | ${counts.warned} |`,
     `| ALLOW | ${counts.allowed} |`,
+    `| NOT EVALUATED | ${counts.uncovered} |`,
   ]
 
+  if (counts.uncovered > 0) {
+    lines.push(
+      '',
+      `${counts.uncovered} of ${results.length} artifacts have not been evaluated by the `
+        + 'network. No verdict was formed for them, so they are neither allowed nor blocked.',
+    )
+  }
+
   const notable = results.filter(
-    result => String(result.verdict ?? '').toUpperCase() !== 'ALLOW',
+    result => !isUncovered(result)
+      && String(result.verdict ?? '').toUpperCase() !== 'ALLOW',
   )
 
   if (notable.length > 0) {

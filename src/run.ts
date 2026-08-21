@@ -80,6 +80,7 @@ export async function run(io: ActionIo): Promise<number> {
   io.setOutput('verdict', verdict)
   io.setOutput('blocked-count', String(counts.blocked))
   io.setOutput('warned-count', String(counts.warned))
+  io.setOutput('uncovered-count', String(counts.uncovered))
 
   if (inputs.format !== 'none') {
     const report =
@@ -95,8 +96,16 @@ export async function run(io: ActionIo): Promise<number> {
   await io.writeSummary(toSummary(results))
 
   io.info(
-    `Verified ${results.length} artifacts. ${counts.blocked} blocked, ${counts.warned} warned.`,
+    `Checked ${results.length} artifacts. ${counts.blocked} blocked, ${counts.warned} warned, `
+      + `${counts.allowed} allowed, ${counts.uncovered} not evaluated.`,
   )
+
+  if (counts.uncovered > 0) {
+    io.warning(
+      `${counts.uncovered} of ${results.length} artifacts have not been evaluated by the network. `
+        + 'They carry no verdict. Use fail-on: uncovered to treat that as a failure.',
+    )
+  }
 
   if (shouldFail(inputs.failOn, counts)) {
     io.setFailed(

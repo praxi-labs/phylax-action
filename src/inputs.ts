@@ -1,4 +1,4 @@
-export type FailOn = 'block' | 'warn' | 'never'
+export type FailOn = 'block' | 'warn' | 'uncovered' | 'never'
 export type ReportFormat = 'sarif' | 'json' | 'none'
 
 export interface ActionInputs {
@@ -16,7 +16,7 @@ export interface ActionInputs {
 
 export type InputReader = (name: string) => string
 
-const FAIL_ON: readonly FailOn[] = ['block', 'warn', 'never']
+const FAIL_ON: readonly FailOn[] = ['block', 'warn', 'uncovered', 'never']
 const FORMATS: readonly ReportFormat[] = ['sarif', 'json', 'none']
 
 export function parseInputs(read: InputReader): ActionInputs {
@@ -60,10 +60,13 @@ export function parseInputs(read: InputReader): ActionInputs {
 
 export function shouldFail(
   failOn: FailOn,
-  counts: { blocked: number; warned: number },
+  counts: { blocked: number; warned: number; uncovered?: number },
 ): boolean {
   if (failOn === 'never') {
     return false
+  }
+  if (failOn === 'uncovered') {
+    return counts.blocked > 0 || counts.warned > 0 || (counts.uncovered ?? 0) > 0
   }
   if (failOn === 'warn') {
     return counts.blocked > 0 || counts.warned > 0

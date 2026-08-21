@@ -22284,7 +22284,7 @@ async function discoverArtifacts(root, readFileImpl = (path) => readFile(path, "
 }
 
 // src/inputs.ts
-var FAIL_ON = ["block", "warn", "never"];
+var FAIL_ON = ["block", "warn", "uncovered", "never"];
 var FORMATS = ["sarif", "json", "none"];
 function parseInputs(read) {
   const apiToken = read("api-token").trim();
@@ -22320,6 +22320,9 @@ function shouldFail(failOn, counts) {
   if (failOn === "never") {
     return false;
   }
+  if (failOn === "uncovered") {
+    return counts.blocked > 0 || counts.warned > 0 || (counts.uncovered ?? 0) > 0;
+  }
   if (failOn === "warn") {
     return counts.blocked > 0 || counts.warned > 0;
   }
@@ -22327,6 +22330,9 @@ function shouldFail(failOn, counts) {
 }
 
 // src/sarif.ts
+function isUncovered(result) {
+  return String(result.coverage ?? "") === "none";
+}
 var SEVERITY_TO_LEVEL = {
   critical: "error",
   high: "error",
@@ -22334,8 +22340,12 @@ var SEVERITY_TO_LEVEL = {
   low: "note"
 };
 function countVerdicts(results) {
-  const counts = { blocked: 0, warned: 0, allowed: 0 };
+  const counts = { blocked: 0, warned: 0, allowed: 0, uncovered: 0 };
   for (const result of results) {
+    if (isUncovered(result)) {
+      counts.uncovered++;
+      continue;
+    }
     const verdict = String(result.verdict ?? "").toUpperCase();
     if (verdict === "BLOCK") {
       counts.blocked++;
@@ -22429,10 +22439,17 @@ function toSummary(results) {
     `| --- | --- |`,
     `| BLOCK | ${counts.blocked} |`,
     `| WARN | ${counts.warned} |`,
-    `| ALLOW | ${counts.allowed} |`
+    `| ALLOW | ${counts.allowed} |`,
+    `| NOT EVALUATED | ${counts.uncovered} |`
   ];
+  if (counts.uncovered > 0) {
+    lines.push(
+      "",
+      `${counts.uncovered} of ${results.length} artifacts have not been evaluated by the network. No verdict was formed for them, so they are neither allowed nor blocked.`
+    );
+  }
   const notable = results.filter(
-    (result) => String(result.verdict ?? "").toUpperCase() !== "ALLOW"
+    (result) => !isUncovered(result) && String(result.verdict ?? "").toUpperCase() !== "ALLOW"
   );
   if (notable.length > 0) {
     lines.push("", "### Findings", "", "| Artifact | Verdict | Risk |", "| --- | --- | --- |");
@@ -22493,6 +22510,7 @@ async function run(io) {
   io.setOutput("verdict", verdict);
   io.setOutput("blocked-count", String(counts.blocked));
   io.setOutput("warned-count", String(counts.warned));
+  io.setOutput("uncovered-count", String(counts.uncovered));
   if (inputs.format !== "none") {
     const report = inputs.format === "sarif" ? toSarif(results, VERSION) : JSON.stringify(results, null, 2);
     await io.writeFile(inputs.output, report);
@@ -22501,8 +22519,13 @@ async function run(io) {
   }
   await io.writeSummary(toSummary(results));
   io.info(
-    `Verified ${results.length} artifacts. ${counts.blocked} blocked, ${counts.warned} warned.`
+    `Checked ${results.length} artifacts. ${counts.blocked} blocked, ${counts.warned} warned, ${counts.allowed} allowed, ${counts.uncovered} not evaluated.`
   );
+  if (counts.uncovered > 0) {
+    io.warning(
+      `${counts.uncovered} of ${results.length} artifacts have not been evaluated by the network. They carry no verdict. Use fail-on: uncovered to treat that as a failure.`
+    );
+  }
   if (shouldFail(inputs.failOn, counts)) {
     io.setFailed(
       `Phylax verdict ${verdict}. ${counts.blocked} artifacts blocked, ${counts.warned} warned.`

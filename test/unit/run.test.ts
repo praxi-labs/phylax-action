@@ -140,7 +140,7 @@ describe('sarif', () => {
   ]
 
   it('counts verdicts', () => {
-    expect(countVerdicts(results)).toEqual({ blocked: 1, warned: 1, allowed: 1 })
+    expect(countVerdicts(results)).toEqual({ blocked: 1, warned: 1, allowed: 1, uncovered: 0 })
   })
 
   it('reports the strictest verdict', () => {
@@ -232,5 +232,24 @@ describe('run', () => {
     const context = io({ 'api-token': '' })
     expect(await run(context)).toBe(1)
     expect(context.failures.join(' ')).toMatch(/api-token is required/)
+  })
+})
+
+describe('uncovered artifacts', () => {
+  const mixed = [
+    { artifact: 'npm:a', verdict: 'ALLOW' },
+    { artifact: 'npm:b', verdict: 'ALLOW', coverage: 'none' },
+  ]
+
+  it('does not count an unevaluated artifact as allowed', () => {
+    expect(countVerdicts(mixed)).toEqual({ blocked: 0, warned: 0, allowed: 1, uncovered: 1 })
+  })
+
+  it('fails the job only when fail-on is uncovered', () => {
+    const counts = { blocked: 0, warned: 0, uncovered: 1 }
+    expect(shouldFail('block', counts)).toBe(false)
+    expect(shouldFail('warn', counts)).toBe(false)
+    expect(shouldFail('uncovered', counts)).toBe(true)
+    expect(shouldFail('never', counts)).toBe(false)
   })
 })
